@@ -1,12 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-/**
- * [MINOR UPDATES]
- * The main "engine" of the application.
- * It orchestrates all the other objects (Menu, Cart, Orders).
- */
 public class FoodOrderingSystem {
     private Menu menu;
     private ShoppingCart cart;
@@ -19,10 +13,6 @@ public class FoodOrderingSystem {
         this.orderHistory = new ArrayList<>();
         this.scanner = new Scanner(System.in);
     }
-
-    /**
-     * The main application loop.
-     */
     public void run() {
         System.out.println("Welcome to the Food Ordering System!");
         boolean isRunning = true;
@@ -36,7 +26,7 @@ public class FoodOrderingSystem {
                     menu.displayMenu();
                     break;
                 case 2:
-                    handleAddItemToCart(); // This method is now updated
+                    handleAddItemToCart(); 
                     break;
                 case 3:
                     cart.displayCart();
@@ -68,31 +58,21 @@ public class FoodOrderingSystem {
         System.out.println("6. Exit");
         System.out.print("Please enter your choice: ");
     }
-
-    /**
-     * NEW: Updated logic for customization.
-     */
     private void handleAddItemToCart() {
         menu.displayMenu();
         System.out.print("Enter the ID of the item you want to add: ");
         int id = getUserIntInput();
         
-        // 1. Get the "prototype" (e.g., the base Pizza object) from the menu
         FoodItem prototypeItem = menu.getPrototypeItemById(id);
 
         if (prototypeItem == null) {
             System.out.println("Invalid item ID. Please try again.");
             return;
         }
-
-        // 2. Create a NEW, fresh copy for the user.
         FoodItem newItem = prototypeItem.create();
 
-        // 3. Call the customize() method. Polymorphism runs the
-        //    correct version (e.g., Pizza.customize() or Burger.customize()).
         newItem.customize(scanner);
 
-        // 4. Get the quantity for the *customized* item
         System.out.print("Enter quantity for " + newItem.getName() + ": ");
         int quantity = getUserIntInput();
 
@@ -100,8 +80,6 @@ public class FoodOrderingSystem {
             System.out.println("Quantity must be greater than 0.");
             return;
         }
-
-        // 5. Add the fully customized item to the cart
         cart.addItem(newItem, quantity);
     }
 
@@ -112,7 +90,6 @@ public class FoodOrderingSystem {
         }
 
         double total = cart.calculateTotal();
-        // CHANGED: $ to ₹
         System.out.println("Your total is: ₹" + String.format("%.2f", total));
         System.out.print("Confirm checkout? (yes/no): ");
         String confirmation = scanner.nextLine().trim().toLowerCase();
@@ -143,13 +120,10 @@ public class FoodOrderingSystem {
 
     private int getUserIntInput() {
         try {
-            // We must use scanner.nextLine() to read the integer
-            // to avoid issues with the scanner's newline character
-            // when we read text (yes/no) next.
             return Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {
             System.out.println("Invalid input. Please enter a number.");
-            return -1; // Return a safe "invalid" value
+            return -1; 
         }
     }
 }
